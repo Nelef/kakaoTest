@@ -1,5 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- 기본 Light 모드 테마 -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- 다른 스타일 속성들 추가 가능 -->
+    </style>
 
-    <style name="Theme.KakaoTest" parent="Theme.AppCompat.Light.NoActionBar" />
+    <!-- Dark 모드 테마 -->
+    <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">
+        <!-- 다른 스타일 속성들 추가 가능 -->
+    </style>
 </resources>

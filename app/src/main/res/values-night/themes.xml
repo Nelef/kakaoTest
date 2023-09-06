@@ -1,0 +1,6 @@
+<resources>
+    <!-- Dark 모드 테마 -->
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <!-- 다른 스타일 속성들 추가 가능 -->
+    </style>
+</resources>
