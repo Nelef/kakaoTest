@@ -9,8 +9,8 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.fragment.app.viewModels
 import com.uyjang.kakaotest.base.BaseFragment
 import com.uyjang.kakaotest.databinding.FragmentMainBinding
-import com.uyjang.kakaotest.view.fragment.ui.FavoriteFragment
-import com.uyjang.kakaotest.view.fragment.ui.SearchFragment
+import com.uyjang.kakaotest.view.ui.FavoriteFragment
+import com.uyjang.kakaotest.view.ui.SearchFragment
 import com.uyjang.kakaotest.viewModel.MainViewModel
 
 class MainFragment : BaseFragment() {

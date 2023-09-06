@@ -1,4 +1,4 @@
-package com.uyjang.kakaotest.view.fragment.ui
+package com.uyjang.kakaotest.view.ui
 
 import android.app.AlertDialog
 import android.os.Bundle
