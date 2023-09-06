@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -57,7 +56,7 @@ class SearchFragment : Fragment() {
                 is UiState.Error -> {
                     // 에러 메시지를 토스트로 띄우거나 사용자에게 알림
                     hideLoadingUI()
-                    showCustomDialog(uiState.message)
+                    showCustomDialog(uiState.message) { viewModel.setUIState(UiState.None) }
                 }
 
                 is UiState.Success<*> -> {
@@ -82,7 +81,7 @@ class SearchFragment : Fragment() {
                     }
                 } else {
                     // 검색 바에 입력된 내용이 비어 있을 때 에러 메시지 표시
-                    showToast("검색어를 입력하세요.")
+                    showSnackbar("검색어를 입력하세요.")
                 }
             }
 
@@ -111,15 +110,16 @@ class SearchFragment : Fragment() {
         binding.root.removeView(loadingView)
     }
 
-    private fun showToast(message: String) {
+    private fun showSnackbar(message: String) {
         Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
     }
 
-    private fun showCustomDialog(message: String) {
+    private fun showCustomDialog(message: String, onClick: () -> Unit) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setMessage(message)
             .setPositiveButton("확인") { dialog, _ ->
                 // 확인 버튼 클릭 시 실행할 동작
+                onClick()
                 dialog.dismiss()
             }
 

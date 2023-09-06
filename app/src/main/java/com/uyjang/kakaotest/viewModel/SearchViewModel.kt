@@ -2,12 +2,10 @@ package com.uyjang.kakaotest.viewModel
 
 import android.app.Application
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.android.material.snackbar.Snackbar
 import com.uyjang.kakaotest.base.UiState
 import com.uyjang.kakaotest.data.remote.model.SearchImageResponseData
 import com.uyjang.kakaotest.data.remote.repository.ApiResult
@@ -36,22 +34,26 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         repository.fetchSearchImage(query, sort, page).collectLatest { result ->
             imageData = when (result) {
                 is ApiResult.Loading -> {
-                    _uiState.postValue(UiState.Loading)
+                    setUIState(UiState.Loading)
                     imageData
                 }
 
                 is ApiResult.Error -> {
-                    _uiState.postValue(UiState.Error("api 요청에 실패하였습니다."))
+                    setUIState(UiState.Error("api 요청에 실패하였습니다."))
                     SearchImageResponseData()
                 }
 
                 is ApiResult.Success -> {
-                    _uiState.postValue(UiState.None)
+                    setUIState(UiState.None)
                     result.data
                 }
             }
             Log.i("uyjang", imageData.toString())
         }
+    }
+
+    fun setUIState(uiState: UiState<*>){
+        _uiState.postValue(uiState)
     }
 }
 
