@@ -19,13 +19,10 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class SearchViewModel(application: Application) : AndroidViewModel(application) {
+class SearchViewModel(application: Application) : MainViewModel(application) {
     init {
         viewModelScope.launch {
             repository = ApiServiceRepository()
-            // DataStore로부터 즐겨찾기 목록을 가져옵니다.
-            favoriteDataSource = FavoriteDataSource(getApplication())
-            favoriteList = favoriteDataSource.getPreference().first().toMutableList()
         }
     }
 
@@ -35,9 +32,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
 
     // 리사이클러뷰
     private val items = mutableListOf<Document>() // 아이템
-    private lateinit var favoriteDataSource: FavoriteDataSource // 즐겨찾기 기능
-    private var favoriteList = mutableListOf<Document>()
-    val onFavoriteButtonClick: (Document) -> Unit = { document ->
+    private val onFavoriteButtonClick: (Document) -> Unit = { document ->
         addToFavorites(document)
     }
     val adapter = SearchAdapter(items, favoriteList, onFavoriteButtonClick) // 어댑터

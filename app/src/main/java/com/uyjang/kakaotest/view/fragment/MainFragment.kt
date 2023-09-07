@@ -13,8 +13,8 @@ import com.uyjang.kakaotest.view.ui.FavoriteFragment
 import com.uyjang.kakaotest.view.ui.SearchFragment
 import com.uyjang.kakaotest.viewModel.MainViewModel
 
-class MainFragment : BaseFragment() {
-    private val viewModel: MainViewModel by viewModels()
+open class MainFragment : BaseFragment() {
+    val viewModel: MainViewModel by viewModels()
     private lateinit var binding: FragmentMainBinding
 
     override fun onCreateView(
@@ -22,13 +22,6 @@ class MainFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMainBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // 탭 선택 이벤트 리스너 추가 등의 작업을 수행할 수 있습니다.
 
         val fragmentList = listOf(
             SearchFragment(),
@@ -46,5 +39,11 @@ class MainFragment : BaseFragment() {
             tabLayout.getTabAt(0)?.text = "검색하기"
             tabLayout.getTabAt(1)?.text = "즐겨찾기"
         }
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
     }
 }

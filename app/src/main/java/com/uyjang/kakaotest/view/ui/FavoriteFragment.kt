@@ -6,8 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.uyjang.kakaotest.R
+import com.uyjang.kakaotest.view.fragment.MainFragment
 
-class FavoriteFragment : Fragment() {
+class FavoriteFragment : MainFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

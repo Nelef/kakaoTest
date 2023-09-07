@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -14,12 +13,14 @@ import com.uyjang.kakaotest.R
 import com.uyjang.kakaotest.base.UiState
 import com.uyjang.kakaotest.data.remote.model.Document
 import com.uyjang.kakaotest.databinding.FragmentSearchBinding
+import com.uyjang.kakaotest.view.fragment.MainFragment
 import com.uyjang.kakaotest.viewModel.SearchViewModel
+import com.uyjang.kakaotest.viewModel.adapter.SearchAdapter
 import kotlinx.coroutines.launch
 
-class SearchFragment : Fragment() {
+class SearchFragment : MainFragment() {
 
-    private val viewModel: SearchViewModel by viewModels()
+    private val searchViewModel: SearchViewModel by viewModels()
     private lateinit var binding: FragmentSearchBinding
     private lateinit var loadingView: View // 로딩 UI를 나타내는 뷰
 
@@ -39,7 +40,7 @@ class SearchFragment : Fragment() {
             .inflate(R.layout.loading_layout, binding.root, false)
 
         // uiState를 관찰하여 UI 업데이트
-        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+        searchViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when (uiState) {
                 is UiState.Loading -> {
                     // 로딩 UI를 표시하거나 진행 중인 작업을 수행
@@ -54,7 +55,7 @@ class SearchFragment : Fragment() {
                 is UiState.Error -> {
                     // 에러 메시지를 토스트로 띄우거나 사용자에게 알림
                     hideLoadingUI()
-                    showCustomDialog(uiState.message) { viewModel.setUIState(UiState.None) }
+                    showCustomDialog(uiState.message) { searchViewModel.setUIState(UiState.None) }
                 }
 
                 is UiState.Success<*> -> {
@@ -75,7 +76,7 @@ class SearchFragment : Fragment() {
                             searchBar.text.toString() + " 검색합니다.",
                             Snackbar.LENGTH_SHORT
                         ).show()
-                        viewModel.getTickerDetails(searchText)
+                        searchViewModel.getTickerDetails(searchText)
                     }
                 } else {
                     // 검색 바에 입력된 내용이 비어 있을 때 에러 메시지 표시
@@ -83,10 +84,10 @@ class SearchFragment : Fragment() {
                 }
             }
             testButton1.setOnClickListener {
-                viewModel.updateItems(clear = true)
+                searchViewModel.updateItems(clear = true)
             }
             testButton2.setOnClickListener {
-                viewModel.updateItems(
+                searchViewModel.updateItems(
                     mutableListOf(
                         Document(
                             collection = "example_collection1",
@@ -124,7 +125,7 @@ class SearchFragment : Fragment() {
 
             gridRecyclerView.layoutManager =
                 GridLayoutManager(requireContext(), 4) // 그리드 레이아웃 설정
-            gridRecyclerView.adapter = viewModel.adapter
+            gridRecyclerView.adapter = searchViewModel.adapter
         }
     }
 
