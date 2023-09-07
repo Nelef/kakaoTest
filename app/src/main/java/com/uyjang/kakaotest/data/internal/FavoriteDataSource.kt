@@ -7,6 +7,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
+import com.uyjang.kakaotest.data.remote.model.Document
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -14,7 +15,7 @@ class FavoriteDataSource(private val context: Context) {
     private val Context.preferenceDataStore by preferencesDataStore(name = "favoriteDataStore")
     private val key = stringPreferencesKey("favorite")
 
-    fun getPreference(): Flow<List<String>> {
+    fun getPreference(): Flow<List<Document>> {
         return context.preferenceDataStore.data.map { preferences ->
             val json = preferences[key] ?: ""
             if (json.isBlank()) {
@@ -30,7 +31,7 @@ class FavoriteDataSource(private val context: Context) {
     }
 
 
-    suspend fun setPreference(list: List<String>) {
+    suspend fun setPreference(list: List<Document>) {
         val json = Gson().toJson(list)
         context.preferenceDataStore.edit { preferences ->
             preferences[key] = json

@@ -7,16 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.uyjang.kakaotest.R
 import com.uyjang.kakaotest.base.UiState
+import com.uyjang.kakaotest.data.remote.model.Document
 import com.uyjang.kakaotest.databinding.FragmentSearchBinding
-import com.uyjang.kakaotest.viewModel.SearchItem
 import com.uyjang.kakaotest.viewModel.SearchViewModel
-import com.uyjang.kakaotest.viewModel.adapter.SearchAdapter
 import kotlinx.coroutines.launch
 
 class SearchFragment : Fragment() {
@@ -41,7 +39,7 @@ class SearchFragment : Fragment() {
             .inflate(R.layout.loading_layout, binding.root, false)
 
         // uiState를 관찰하여 UI 업데이트
-        viewModel.uiState.observe(viewLifecycleOwner, Observer { uiState ->
+        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when (uiState) {
                 is UiState.Loading -> {
                     // 로딩 UI를 표시하거나 진행 중인 작업을 수행
@@ -63,7 +61,7 @@ class SearchFragment : Fragment() {
                     // 성공 상태 처리 (필요한 경우)
                 }
             }
-        })
+        }
 
         binding.apply {
             searchButton.setOnClickListener {
@@ -84,17 +82,49 @@ class SearchFragment : Fragment() {
                     showSnackbar("검색어를 입력하세요.")
                 }
             }
+            testButton1.setOnClickListener {
+                viewModel.updateItems(clear = true)
+            }
+            testButton2.setOnClickListener {
+                viewModel.updateItems(
+                    mutableListOf(
+                        Document(
+                            collection = "example_collection1",
+                            datetime = "2023-09-06 10:30:00",
+                            displaySitename = "Example Site 1",
+                            docUrl = "https://example.com/doc1",
+                            height = 800,
+                            imageUrl = "https://search2.kakaocdn.net/argon/130x130_85_c/3CKSw1lgNrM",
+                            thumbnailUrl = "https://search2.kakaocdn.net/argon/130x130_85_c/3CKSw1lgNrM",
+                            width = 1200
+                        ),
+                        Document(
+                            collection = "example_collection2",
+                            datetime = "2023-09-06 11:45:00",
+                            displaySitename = "Example Site 2",
+                            docUrl = "https://example.com/doc2",
+                            height = 600,
+                            imageUrl = "https://search4.kakaocdn.net/argon/130x130_85_c/LeDRsSMTETJ",
+                            thumbnailUrl = "https://search4.kakaocdn.net/argon/130x130_85_c/LeDRsSMTETJ",
+                            width = 900
+                        ),
+                        Document(
+                            collection = "example_collection3",
+                            datetime = "2023-09-06 14:20:00",
+                            displaySitename = "Example Site 3",
+                            docUrl = "https://example.com/doc3",
+                            height = 1200,
+                            imageUrl = "https://search1.kakaocdn.net/argon/130x130_85_c/HB6IuG80j3h",
+                            thumbnailUrl = "https://search1.kakaocdn.net/argon/130x130_85_c/HB6IuG80j3h",
+                            width = 1800
+                        )
+                    )
+                )
+            }
 
             gridRecyclerView.layoutManager =
                 GridLayoutManager(requireContext(), 4) // 그리드 레이아웃 설정
-            val items = mutableListOf(
-                SearchItem("아이템 1"),
-                SearchItem("아이템 2"),
-                SearchItem("아이템 3"),
-                // 여기에 더 많은 아이템을 추가할 수 있습니다.
-            )
-            val adapter = SearchAdapter(items)
-            gridRecyclerView.adapter = adapter
+            gridRecyclerView.adapter = viewModel.adapter
         }
     }
 
